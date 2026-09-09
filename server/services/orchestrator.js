@@ -18,7 +18,6 @@ import { scrapeJobUrl } from "./tools/jdScraper.js";
 import { findJobs } from "./tools/jobSearch.js";
 import { saveSession, getSession, deleteSession } from "./sessionStore.js";
 
-dotenv.config({ path: "../.env" });
 
 var client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 

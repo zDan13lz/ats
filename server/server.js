@@ -19,6 +19,7 @@ import agentRoutes from "./routes/agent.js";
 import exportRoutes from "./routes/export.js";
 
 dotenv.config({ path: "../.env" });
+dotenv.config();
 
 var app = express();
 var PORT = process.env.PORT || 3001;
@@ -37,6 +38,20 @@ app.get("/api/health", function (req, res) {
   res.json({ status: "ok" });
 });
 
+// ── Serve built client in production ──
+import path from "path";
+import { fileURLToPath } from "url";
+var __dirname = path.dirname(fileURLToPath(import.meta.url));
+var clientDist = path.join(__dirname, "..", "client", "dist");
+
+import fs from "fs";
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+  console.log("Serving client from " + clientDist);
+}
 // ── Start ──
 app.listen(PORT, function () {
   console.log("ATS server running on http://localhost:" + PORT);
